@@ -45,9 +45,9 @@ public class TheaterService {
 
 
         int noOfRowsOfClassicSeats = noOfClassicSeats/5;
-        int noOfSeatsInLastRow = noOfClassicSeats%5;
+        int noOfSeatsInLastRowClassic = noOfClassicSeats%5;
         int row;
-        for( row = 1; row<=noOfRowsOfClassicSeats;row++) {
+        for( row = 1; row<=noOfRowsOfClassicSeats; row++) {
             for(int j = 1; j<=5;j++) {
                 char ch = (char)('A'+j-1);
                 String seatNo =  "" + row + ch;
@@ -60,7 +60,7 @@ public class TheaterService {
                 theaterSeatList.add(theaterSeat);
             }
         }
-        for(int j = 1;j<=noOfSeatsInLastRow;j++){
+        for(int j = 1;j<=noOfSeatsInLastRowClassic;j++){
             char ch = (char)('A'+j-1);
             String seatNo =  "" + row + ch;
 
@@ -76,8 +76,13 @@ public class TheaterService {
 
 
         int noOfRowsInPremiumSeats = noOfPremiumSeats/5;
-        noOfSeatsInLastRow = noOfPremiumSeats%5;
-        for( row = 1; row<noOfRowsInPremiumSeats;row++) {
+        int noOfSeatsInLastRowPremium = noOfPremiumSeats%5;
+
+        int currentRow = row;
+        if(noOfSeatsInLastRowClassic>0){
+            currentRow++;
+        }
+        for( row = currentRow; row<=noOfRowsInPremiumSeats+currentRow-1;row++) {
             for(int j = 1; j<=5;j++) {
                 char ch = (char)('A'+j-1);
                 String seatNo =  "" + row + ch;
@@ -90,7 +95,7 @@ public class TheaterService {
                 theaterSeatList.add(theaterSeat);
             }
         }
-        for(int j = 1;j<=noOfSeatsInLastRow;j++){
+        for(int j = 1;j<=noOfSeatsInLastRowPremium;j++){
             char ch = (char)('A'+j-1);
             String seatNo =  "" + row + ch;
 
