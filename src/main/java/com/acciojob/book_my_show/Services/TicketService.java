@@ -10,6 +10,7 @@ import com.acciojob.book_my_show.Repositories.ShowSeatRepository;
 import com.acciojob.book_my_show.Repositories.TicketRepository;
 import com.acciojob.book_my_show.Repositories.UserRepository;
 import com.acciojob.book_my_show.Requests.BookTicketRequest;
+import com.acciojob.book_my_show.Responses.TicketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
 
-    public Ticket bookTicket(BookTicketRequest bookTicketRequest){
+    public String bookTicket(BookTicketRequest bookTicketRequest){
 
         Show show = showRepository.findById(bookTicketRequest.getShowId()).get();
         User user = userRepository.findById(bookTicketRequest.getUserId()).get();
@@ -57,6 +58,7 @@ public class TicketService {
                 .movieName(show.getMovie().getMovieName())
                 .theaterName(show.getTheater().getName())
                 .totalAmount(totalAmount)
+                .bookedSeats(bookTicketRequest.getRequestedSeats().toString())
                 .show(show)
                 .user(user)
                 .build();
@@ -64,8 +66,29 @@ public class TicketService {
         showSeatRepository.saveAll(showSeatList);
         ticket = ticketRepository.save(ticket);
 
-        return ticket;
+        return ticket.getTicketId();
+    }
+
+    public TicketResponse generateTicket(String ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId).get();
+
+        TicketResponse ticketResponse = TicketResponse.builder()
+                .bookedSeats(ticket.getBookedSeats())
+                .movieName(ticket.getMovieName())
+                .showTime(ticket.getShowTime())
+                .showDate(ticket.getShowDate())
+                .theaterName(ticket.getTheaterName())
+                .totalAmount(ticket.getTotalAmount())
+                .build();
+
+        return ticketResponse;
+
 
     }
+
+
+
+
 
 }
